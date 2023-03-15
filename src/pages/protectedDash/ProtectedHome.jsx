@@ -7,6 +7,8 @@ const ProtectedHome = () => {
         <p>{new Date().toISOString().slice(0,11)}</p>
         <p><Link to="/dash/notes">View TechNotes</Link></p>
         <p><Link to="/dash/users">View All Users</Link></p>
+        <p><Link to="/dash/notes/new">Create New TechNotes</Link></p>
+        <p><Link to="/dash/users/new">Create New User</Link></p>
     </div>
   )
 }

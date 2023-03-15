@@ -6,6 +6,10 @@ import ProtectedHome from "./pages/protectedDash/ProtectedHome";
 import UsersList from "./pages/protectedDash/UsersList";
 import Login from "./pages/public/Login";
 import PublicHome from "./pages/public/PublicHome";
+import CreateNewNotes from "./pages/protectedDash/CreateNewNotes";
+import CreateNewUser from "./pages/protectedDash/CreateNewUser";
+import EditNotes from "./pages/protectedDash/EditNotes";
+import EditUser from "./pages/protectedDash/EditUser";
 
 function App() {
   return (
@@ -21,13 +25,17 @@ function App() {
         <Route path="dash" element={<DashLayout />} >
           {/* // ! This a nested route inside of DashLayout, hence it is self closing. @ /dash path the Outlet inside the Layout renders the children i.e.. ProtectedHome Compoennt */}
           <Route index element={<ProtectedHome />} />
-          {/* //! This is a parent which is also a nested route but without any element */}
+          {/* // ! This is a parent which is also a nested route but without any element */}
           <Route path="notes" >
             <Route index element={<NotesList />} />
+            <Route path=":id" element={<EditNotes />} />
+            <Route path="new" element={<CreateNewNotes />} />
           </Route>
 
           <Route path="users" >
             <Route index element={<UsersList />} />
+            <Route path=":id" element={<EditUser />} />
+            <Route path="new" element={<CreateNewUser />} />
           </Route>
         </Route>
       </Route>
