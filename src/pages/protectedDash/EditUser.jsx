@@ -298,7 +298,10 @@ function UserEditForm({data}){
                   />
                 </div>
               }
-              <Button type="submit" variant="outlined" >Update User</Button>
+              <CheckBoxParentWrapper>
+                <Button type="submit" variant="outlined" >Update User</Button>
+                <Button variant="outlined" sx={{color: "red"}} >Delete User</Button>
+              </CheckBoxParentWrapper>
           </MyFormWrapper>
       </Paper>
     </div>
