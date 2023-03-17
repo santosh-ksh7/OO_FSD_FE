@@ -1,10 +1,15 @@
 import {Link} from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
+
 
 const ProtectedHome = () => {
+
+  const{userState, setUserState} = useAuth();
+  console.log(userState)
+
   return (
     <div>
         <h3>Welcome to TechNotes App</h3>
-        <p>{new Date().toISOString().slice(0,11)}</p>
         <p><Link to="/dash/notes">View TechNotes</Link></p>
         <p><Link to="/dash/users">View All Users</Link></p>
         <p><Link to="/dash/notes/new">Create New TechNotes</Link></p>

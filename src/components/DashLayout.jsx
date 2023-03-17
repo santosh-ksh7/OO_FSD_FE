@@ -12,7 +12,7 @@ function DashLayout() {
         <div>
             <Outlet />
         </div>
-        <DashFooter />
+        {/* <DashFooter /> */}
     </>
   )
 }

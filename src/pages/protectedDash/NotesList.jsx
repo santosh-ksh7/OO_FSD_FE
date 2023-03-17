@@ -37,7 +37,7 @@ const NotesList = () => {
         // ! Axios ignores the error message coming from backend if the error range are in 400 || 500 series
         // ! However, if you want to see what error message your backend is sending use the error.repsonse.data.message & error.status property respectively
         console.log("🚀 ~ file: NotesList.jsx:18 ~ getAllNotes ~ error:", error);
-        setError(error.message);
+        setError(error.response.data.message);
         setLoading(false);
       }
     }finally{

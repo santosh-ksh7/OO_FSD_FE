@@ -30,7 +30,7 @@ const UsersList = () => {
         return "Request aborted, since the component mounts -> unmounts -> remounts. So by setting the error you do not want your logic to fail."
       }else{
         console.log("🚀 ~ file: NotesList.jsx:18 ~ getAllNotes ~ error:", error);
-        setError(error.message);
+        setError(error.response.data.message);
         setLoading(false);
       }
     }finally{
