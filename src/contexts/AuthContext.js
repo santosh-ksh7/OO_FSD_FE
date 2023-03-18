@@ -5,6 +5,7 @@ export const userContext = createContext();
 
 function AuthContext({children}) {
 
+    // TODO: See if you need to provide an empty object upon initialization of useState hook
     const[userState, setUserState] = useState({
         loginStatus: false, 
         accessToken: "", 

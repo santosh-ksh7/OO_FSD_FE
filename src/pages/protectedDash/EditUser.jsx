@@ -12,6 +12,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { CheckBoxLabelWrapper, CheckBoxParentWrapper, MyFormWrapper, MyTitle } from '../../components/MUIreusable';
 import Switch from '@mui/material/Switch';
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 
 
 
@@ -25,11 +26,12 @@ function EditUser() {
   const[message, setMessage] = useState("");
   const[loading, setLoading] = useState(true);
   const[error, setError] = useState(null);
-
+  
+  const axiosPrivate = useAxiosPrivate();
 
   const getAllSingleUser = async (signal) => {
     try {
-      const response = await axiosClient.get(URL, 
+      const response = await axiosPrivate.get(URL, 
         {
         signal: signal
         }

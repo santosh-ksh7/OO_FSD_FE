@@ -5,6 +5,7 @@ import { Button, Paper } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { axiosClient } from '../../api/axiosClient';
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 
 
 
@@ -17,9 +18,11 @@ function CreateNewNotes() {
   const[loading, setLoading] = useState(true);
   const[error, setError] = useState(null);
 
+  const axiosPrivate = useAxiosPrivate()
+
   const getAllUsers = async (signal) => {
     try{
-      const response = await axiosClient.get(URL, {
+      const response = await axiosPrivate.get(URL, {
         signal: signal
       });
       console.log("🚀 ~ file: NotesList.jsx:16 ~ getAllNotes ~ response:", response);      

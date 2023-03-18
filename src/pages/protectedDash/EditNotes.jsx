@@ -4,6 +4,7 @@ import { axiosClient } from '../../api/axiosClient';
 import TextField from '@mui/material/TextField';
 import { CheckBoxLabelWrapper, CheckBoxParentWrapper, MyFormWrapper, MyTitle } from '../../components/MUIreusable';
 import { Button, Paper, styled, Typography, Box } from "@mui/material";
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 
 
 function EditNotes() {
@@ -17,10 +18,12 @@ function EditNotes() {
   const[loading, setLoading] = useState(true);
   const[error, setError] = useState(null);
 
+  const axiosPrivate = useAxiosPrivate()
+
 
   const getASpecificNote = async (signal) => {
     try {
-      const response = await axiosClient.get(URL, {
+      const response = await axiosPrivate.get(URL, {
         signal: signal
       });
       console.log("🚀 ~ file: EditNotes.jsx:21 ~ getASpecificNote ~ response:", response)

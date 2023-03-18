@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { axiosClient } from "../../api/axiosClient";
 import UsersTable from "../../components/UsersTable";
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 
 const UsersList = () => {
 
@@ -11,10 +12,12 @@ const UsersList = () => {
   const[loading, setLoading] = useState(true);
   const[error, setError] = useState(null);
 
+  const axiosPrivate = useAxiosPrivate();
+
 
   const getAllUsers = async (signal) => {
     try{
-      const response = await axiosClient.get(URL, {
+      const response = await axiosPrivate.get(URL, {
         signal: signal
       });
       console.log("🚀 ~ file: NotesList.jsx:16 ~ getAllNotes ~ response:", response);      

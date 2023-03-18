@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { axiosClient } from "../../api/axiosClient";
 import NotesTable from "../../components/NotesTable";
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 
 
 const NotesList = () => {
@@ -12,9 +13,11 @@ const NotesList = () => {
   const[loading, setLoading] = useState(true);
   const[error, setError] = useState(null);
 
+  const axiosPrivate = useAxiosPrivate();
+
   const getAllNotes = async (signal) => {
     try{
-      const response = await axiosClient.get(URL, 
+      const response = await axiosPrivate.get(URL, 
         {
         signal: signal
         }
