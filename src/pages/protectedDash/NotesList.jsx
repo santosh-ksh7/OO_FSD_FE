@@ -2,11 +2,14 @@ import { useEffect, useState } from "react"
 import { axiosClient } from "../../api/axiosClient";
 import NotesTable from "../../components/NotesTable";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
+import useUserInfo from "../../hooks/useUserInfo"
 
 
 const NotesList = () => {
 
   const URL = "notes";
+
+  const{name, isAdmin, isManager} = useUserInfo();
 
   const[allnotes, setAllNotes] = useState([]);
   const[message, setMessage] = useState("");
@@ -78,7 +81,8 @@ const NotesList = () => {
               </tr>
             </thead>
             <tbody>
-              {allnotes.map((ele, index) => <NotesTable data={ele} key={index} />)}
+              {(isAdmin || isManager) && allnotes.map((ele, index) => <NotesTable data={ele} key={index} />)}
+              {allnotes.filter((ele) => ele.assignedTo === name).map((ele, index) => <NotesTable data={ele} key={index} />)}
             </tbody>
           </table>
         </>

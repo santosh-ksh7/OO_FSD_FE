@@ -1,7 +1,7 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import * as yup from 'yup'
-import { MyFormWrapper } from '../../components/MUIreusable'
+import { CheckBoxLabelWrapper, MyFormWrapper } from '../../components/MUIreusable'
 import TextField from '@mui/material/TextField';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Button, Paper } from "@mui/material";
@@ -13,6 +13,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAuth } from '../../hooks/useAuth';
 import { axiosClient } from '../../api/axiosClient';
 import { useNavigate } from 'react-router-dom';
+import usePersist from '../../hooks/usePersist';
 
 
 
@@ -22,6 +23,8 @@ function Login() {
   const URL = "/auth/login"
 
   const navigate = useNavigate();
+
+  const[persist, setPersist] = usePersist();
 
   const{userState, setUserState} = useAuth();  
 
@@ -62,6 +65,8 @@ function Login() {
       login(values);
     }
   })
+
+  const handlePersistToggle = () => setPersist((prev) => !prev)
 
   return (
     <div>
@@ -111,6 +116,10 @@ function Login() {
             type={showpwd ? "text" : "password"}
             variant="standard"
         />
+        <CheckBoxLabelWrapper>
+          <input type="checkbox" id="persist" onChange={handlePersistToggle} checked={persist} />
+          <label htmlFor="persist">Persistent Login || Remember me</label>
+        </CheckBoxLabelWrapper>
         <Button type="submit" >Login</Button>
       </MyFormWrapper>
       </Paper>

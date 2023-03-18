@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import { CheckBoxLabelWrapper, CheckBoxParentWrapper, MyFormWrapper, MyTitle } from '../../components/MUIreusable';
 import { Button, Paper, styled, Typography, Box } from "@mui/material";
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
+import useUserInfo from "../../hooks/useUserInfo"
 
 
 function EditNotes() {
@@ -76,6 +77,8 @@ export default EditNotes
 function EditNotesFrom({data}){
 
   const ticketNo = data.ticketNo;
+
+  const{isManager, isAdmin} = useUserInfo()
 
   const[title, setTitle] = useState(data.title)
   const[description, setDescription] = useState(data.description)
@@ -167,7 +170,7 @@ function EditNotesFrom({data}){
             <h3>Assigned to:- {data.assignedTo}</h3>
             <CheckBoxParentWrapper>
               <Button variant="outlined" type="submit">Update Notes</Button>
-              <Button variant="outlined" sx={{color: "red"}}>Delete</Button>
+              <Button disabled={!isManager || !isAdmin} variant="outlined" sx={{color: "red"}}>Delete</Button>
             </CheckBoxParentWrapper>
         </MyFormWrapper>
       </Paper>
