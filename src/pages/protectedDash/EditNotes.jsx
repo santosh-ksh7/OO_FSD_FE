@@ -78,7 +78,7 @@ function EditNotesFrom({data}){
 
   const ticketNo = data.ticketNo;
 
-  const{isManager, isAdmin} = useUserInfo()
+  const{isManager, isAdmin, name} = useUserInfo()
 
   const[title, setTitle] = useState(data.title)
   const[description, setDescription] = useState(data.description)
@@ -117,7 +117,8 @@ function EditNotesFrom({data}){
 
   return(
     <div>
-      <Paper elevation={24} square sx={{width: "360px", padding: "10px"}}>
+      {name === data.assignedTo || isManager || isAdmin ?
+        <Paper elevation={24} square sx={{width: "360px", padding: "10px"}}>
         <h3>Edit your Notes</h3>
         {validationError ? <MyTitle sx={{color: "red"}}>{validationError}</MyTitle> : null}
         <MyFormWrapper onSubmit={(e) => handleSubmit(e)} >
@@ -173,7 +174,10 @@ function EditNotesFrom({data}){
               <Button disabled={!isManager || !isAdmin} variant="outlined" sx={{color: "red"}}>Delete</Button>
             </CheckBoxParentWrapper>
         </MyFormWrapper>
-      </Paper>
+        </Paper>
+        :
+        <h1>You are not Authorized to edit notes that belongs to other employees.</h1>
+      }
     </div>
   )
 }

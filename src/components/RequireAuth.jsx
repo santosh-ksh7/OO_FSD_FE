@@ -4,7 +4,7 @@ import useUserInfo from "../hooks/useUserInfo"
 function RequireAuth({allowedRoles}) {
 
     const location = useLocation();
-    const {roles} = useUserInfo();
+    const {roles, name} = useUserInfo();
     
     
 
@@ -13,8 +13,10 @@ function RequireAuth({allowedRoles}) {
         {
             roles.some((ele) => allowedRoles.includes(ele)) ? 
                 <Outlet />
+                : name ? 
+                  <Navigate to="/unauthorized" />
                 :
-                <Navigate to="/login" state={{ from: location}} replace />
+                  <Navigate to="/login" state={{ from: location}} replace />
         }
     </div>
   )
