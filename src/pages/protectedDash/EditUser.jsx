@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../api/axiosClient";
 import TextField from '@mui/material/TextField';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -85,12 +85,13 @@ function UserEditForm({data}){
 
   const axiosPrivate = useAxiosPrivate();
 
+  const navigate = useNavigate()
+
   const id = data.id;
   const[name, setName] = useState(data.name);
   const[roles, setRoles] = useState(JSON.parse(data.roles));
   const[active, setActive] = useState(data.active);
   const[password, setPassword] = useState("");
-  const[re_password, setRe_Password] = useState("");
   const[showpwd, setShowpwd] = useState(false);
   const[validationError, setValidationError] = useState("");
 
@@ -115,22 +116,25 @@ function UserEditForm({data}){
     }
   }, [roles])
 
+  // * Setting up error || noError whenever update password is toggled
+  useEffect(() => {
+    if(updatingPassword){
+      setValidationError("Password is a required field")
+    }else{
+      setValidationError("")
+    }
+  },[updatingPassword])
+
   // * Run the validation everytime the password is chamged/typed
   useEffect(() => {
-    if(password.length >= 8 && password.includes("!") || password.includes("@") || password.includes("#") || password.includes("$") || password.includes("^")){
-      setValidationError("")
-    }else{
-      setValidationError("Password should minimum 8 digit in length & should contain any of the special character !, @, #, $, ^")
+    if(updatingPassword){
+      if(password.length >= 8 && password.includes("!") || password.includes("@") || password.includes("#") || password.includes("$") || password.includes("^")){
+        setValidationError("")
+      }else{
+        setValidationError("Password should minimum 8 digit in length & should contain any of the special character !, @, #, $, ^")
+      }
     }
   }, [password])
-
-  useEffect(() => {
-    if(re_password === password){
-      setValidationError("")
-    }else{
-      setValidationError("Both your password should match")
-    }
-  }, [re_password])
 
   // * A function to handle change in roles for user
   function alterRoles(event){
@@ -144,29 +148,49 @@ function UserEditForm({data}){
         setRoles(newArray);
       }
     }
-}
+  }
 
   // * A function to handle status change for user
   function alterStatus(event){
     setActive(event.target.value);
   }
 
-
-  function handleSubmit(event){
+  // * A function to edit the user - 2 possible - with password || without password
+  async function handleSubmit(event){
     event.preventDefault();
-    if(updatingPassword){
-      console.log(name, active, roles, password, re_password, updatingPassword)
-    }else{
-      console.log(name, active, roles, updatingPassword)
+    const editUserURL = "/users"
+    try {
+      if(validationError){
+        alert(validationError)
+      }else{
+        let data2send
+        if(!updatingPassword){
+          data2send = {id, name, roles: JSON.stringify(roles), active, updatingPassword}
+          console.log("🚀 ~ file: EditUser.jsx:167 ~ handleSubmit ~ data2send:", data2send)
+        }else{
+          data2send = {id, name, roles: JSON.stringify(roles), active, password, updatingPassword}
+          console.log("🚀 ~ file: EditUser.jsx:170 ~ handleSubmit ~ data2send:", data2send)
+        }
+        const response = await axiosPrivate.patch(editUserURL, data2send);
+        if(response.status === 200){
+          alert(response.data.message);
+          navigate("/dash/users")
+        }
+      }
+    } catch (error) {
+      console.log("🚀 ~ file: EditUser.jsx:180 ~ handleSubmit ~ error:", error)
+      alert(error.response.data.message);
     }
   }
 
+  // * A function to delete a user
   async function deleteUser(){
     const delURL = `/users/delete-user/${id}`
     try {
       const response = await axiosPrivate.delete(delURL);
       if(response.status === 200){
-        alert(response.data.message)
+        alert(response.data.message);
+        navigate("/dash/users");
       }
     } catch (error) {
       console.log(error);
@@ -288,28 +312,6 @@ function UserEditForm({data}){
                         ),
                     }}
                     label="Password"
-                    type={showpwd ? "text" : "password"}
-                    variant="standard"
-                  />
-                  <TextField
-                    onChange={(e) => setRe_Password(e.target.value)}
-                    name="re_password"
-                    id="standard-password-input3"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <KeyIcon />
-                        </InputAdornment>
-                        ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                        <IconButton onClick={()=> setShowpwd(!showpwd)}>
-                          {showpwd ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    label="Re Type Password"
                     type={showpwd ? "text" : "password"}
                     variant="standard"
                   />

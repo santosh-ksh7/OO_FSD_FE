@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { axiosClient } from '../../api/axiosClient';
 import TextField from '@mui/material/TextField';
 import { CheckBoxLabelWrapper, CheckBoxParentWrapper, MyFormWrapper, MyTitle } from '../../components/MUIreusable';
@@ -78,6 +78,8 @@ function EditNotesFrom({data}){
 
   const URL = "notes"
 
+  const navigate = useNavigate();
+
   const axiosPrivate = useAxiosPrivate()
 
   const ticketNo = data.ticketNo;
@@ -121,7 +123,8 @@ function EditNotesFrom({data}){
         console.log("🚀 ~ file: EditNotes.jsx:117 ~ handleSubmit ~ value:", value);
         const response = await axiosPrivate.patch(URL, value);
         if(response.status === 201){
-          alert(response.data.message)
+          alert(response.data.message);
+          navigate("/dash/notes")
         }
       }else{
         alert("Validation error.")
@@ -141,7 +144,8 @@ function EditNotesFrom({data}){
         console.log(ticketNo);
         const response = await axiosPrivate.delete(delURL);
         if(response.status === 200){
-          alert(response.data.message)
+          alert(response.data.message);
+          navigate("/dash/notes");
         }
       }else{
         alert("You do not have necessary permissions to delete the notes.")

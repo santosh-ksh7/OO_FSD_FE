@@ -2,6 +2,12 @@ import {Link, useNavigate, useLocation} from 'react-router-dom'
 import { axiosClient } from '../api/axiosClient'
 import {useAuth} from "../hooks/useAuth"
 import useUserInfo from '../hooks/useUserInfo'
+import HomeIcon from '@mui/icons-material/Home';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 
 const DashHeader = () => {
 
@@ -37,17 +43,17 @@ const DashHeader = () => {
 
   let createNewNoteLink = null;
   if(pathname !== "/dash/notes/new"){
-    createNewNoteLink = <p style={linkStyle} onClick={() => navigate("/dash/notes/new")}>Create New Note</p>
+    createNewNoteLink = <p style={linkStyle} onClick={() => navigate("/dash/notes/new")}><NoteAddIcon /></p>
   }
 
   let createNewUser = null;
   if(pathname !== "/dash/users/new" && (isManager || isAdmin)){
-    createNewUser = <p style={linkStyle} onClick={() => navigate("/dash/users/new")}>Create New User</p>
+    createNewUser = <p style={linkStyle} onClick={() => navigate("/dash/users/new")}><PersonAddIcon /></p>
   }
 
   let viewAllUsers = null;
   if(pathname !== "/dash/users" && (isManager || isAdmin)){
-    viewAllUsers = <p style={linkStyle} onClick={() => navigate("/dash/users")}>View All User</p>
+    viewAllUsers = <p style={linkStyle} onClick={() => navigate("/dash/users")}><ManageAccountsIcon /></p>
   }
 
   let viewAllNotes = null;
@@ -57,7 +63,7 @@ const DashHeader = () => {
 
   let homeLink = null;
   if(pathname !== "/dash"){
-    homeLink = <p style={linkStyle} onClick={() => navigate("/dash")}>TechNotes</p>
+    homeLink = <p style={linkStyle} onClick={() => navigate("/dash")}><HomeIcon /></p>
   }
 
   return (
@@ -70,7 +76,7 @@ const DashHeader = () => {
         {viewAllNotes}
         <p>Current User:- {name}</p>
         <p>Status:- {status}</p>
-        <p onClick={logout} style={{cursor: "pointer"}}>Logout</p>
+        <p onClick={logout} style={{cursor: "pointer"}}><LogoutIcon /></p>
     </div>
   )
 }

@@ -12,12 +12,15 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 import { CheckBoxLabelWrapper, CheckBoxParentWrapper, MyFormWrapper, MyTitle } from '../../components/MUIreusable';
 import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function CreateNewUser() {
 
     const URL = "users"
+
+    const navigate = useNavigate();
 
     const axiosPrivate = useAxiosPrivate()
 
@@ -42,7 +45,8 @@ function CreateNewUser() {
                 console.log("🚀 ~ file: CreateNewUser.jsx:39 ~ onSubmit: ~ values:", value2send);
                 const response = await axiosPrivate.post(URL, value2send);
                 if(response.status === 201){
-                    alert(response.data.message)
+                    alert(response.data.message);
+                    navigate("/dash/users");
                 }
             } catch (error) {
                 console.log(error);

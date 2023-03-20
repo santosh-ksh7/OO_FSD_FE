@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { axiosClient } from '../../api/axiosClient';
 import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -13,6 +14,8 @@ function CreateNewNotes() {
 
   const URL = "users";
   const createURL = "notes"
+
+  const navigate = useNavigate();
 
   const[allusers, setAllUsers] = useState([]);
   const[message, setMessage] = useState("");
@@ -69,7 +72,8 @@ function CreateNewNotes() {
         try {
           const response = await axiosPrivate.post(createURL, values);
           if(response.status === 201){
-            alert(response.data.message)
+            alert(response.data.message);
+            navigate("/dash/notes");
           }
         } catch(error) {
           console.log(error);
@@ -85,7 +89,7 @@ function CreateNewNotes() {
       {!loading && !error && message && <p>{message + ". A note should be assigned to a user. There are currently no users"}</p>}
       {!loading && !error && !message && allusers?.length && 
         <Paper elevation={24} square sx={{width: "360px", padding: "10px"}}>
-          <h3>Create New User</h3>
+          <h3>Create New TechNote</h3>
           <MyFormWrapper onSubmit={formik.handleSubmit}>
             <TextField
               onChange={formik.handleChange}
