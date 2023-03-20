@@ -76,6 +76,10 @@ export default EditNotes
 
 function EditNotesFrom({data}){
 
+  const URL = "notes"
+
+  const axiosPrivate = useAxiosPrivate()
+
   const ticketNo = data.ticketNo;
 
   const{isManager, isAdmin, name} = useUserInfo()
@@ -109,9 +113,43 @@ function EditNotesFrom({data}){
   }
 
 
-  function handleSubmit(event){
-    event.preventDefault();
-    console.log(title, status, description)
+  async function handleSubmit(event){
+    try {
+      event.preventDefault();
+      if(!validationError){
+        let value = {title, status, description, ticketNo, assignedTo: data.assignedTo};
+        console.log("🚀 ~ file: EditNotes.jsx:117 ~ handleSubmit ~ value:", value);
+        const response = await axiosPrivate.patch(URL, value);
+        if(response.status === 201){
+          alert(response.data.message)
+        }
+      }else{
+        alert("Validation error.")
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
+  }
+
+  async function handleDelete(){
+
+    const delURL = `notes/del-note/${ticketNo}`
+
+    try{
+      if(isAdmin || isManager){
+        console.log(ticketNo);
+        const response = await axiosPrivate.delete(delURL);
+        if(response.status === 200){
+          alert(response.data.message)
+        }
+      }else{
+        alert("You do not have necessary permissions to delete the notes.")
+      }
+    }catch(error){
+      console.log(error);
+      alert(error.response.data.message);
+    }
   }
   
 
@@ -171,7 +209,7 @@ function EditNotesFrom({data}){
             <h3>Assigned to:- {data.assignedTo}</h3>
             <CheckBoxParentWrapper>
               <Button variant="outlined" type="submit">Update Notes</Button>
-              <Button disabled={!isManager || !isAdmin} variant="outlined" sx={{color: "red"}}>Delete</Button>
+              <Button onClick={handleDelete} disabled={!isManager || !isAdmin} variant="outlined" sx={{color: "red"}}>Delete</Button>
             </CheckBoxParentWrapper>
         </MyFormWrapper>
         </Paper>

@@ -12,6 +12,7 @@ import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 function CreateNewNotes() {
 
   const URL = "users";
+  const createURL = "notes"
 
   const[allusers, setAllUsers] = useState([]);
   const[message, setMessage] = useState("");
@@ -59,15 +60,23 @@ function CreateNewNotes() {
     title: yup.string().required(),
     description: yup.string().required().min(10),
     userid: yup.string().required("The notes should be assigned to a user")
-})
+  })
 
-const formik = useFormik({
+  const formik = useFormik({
     initialValues: {title: "", description: "", userid: ""},
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-        console.log(values)
+    onSubmit: async (values) => {
+        try {
+          const response = await axiosPrivate.post(createURL, values);
+          if(response.status === 201){
+            alert(response.data.message)
+          }
+        } catch(error) {
+          console.log(error);
+          alert(error.response.data.message);
+        }
     }
-})
+  })
 
   return (
     <div>

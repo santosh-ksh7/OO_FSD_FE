@@ -83,6 +83,8 @@ export default EditUser
 
 function UserEditForm({data}){
 
+  const axiosPrivate = useAxiosPrivate();
+
   const id = data.id;
   const[name, setName] = useState(data.name);
   const[roles, setRoles] = useState(JSON.parse(data.roles));
@@ -156,6 +158,19 @@ function UserEditForm({data}){
       console.log(name, active, roles, password, re_password, updatingPassword)
     }else{
       console.log(name, active, roles, updatingPassword)
+    }
+  }
+
+  async function deleteUser(){
+    const delURL = `/users/delete-user/${id}`
+    try {
+      const response = await axiosPrivate.delete(delURL);
+      if(response.status === 200){
+        alert(response.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message)
     }
   }
 
@@ -302,7 +317,7 @@ function UserEditForm({data}){
               }
               <CheckBoxParentWrapper>
                 <Button type="submit" variant="outlined" >Update User</Button>
-                <Button variant="outlined" sx={{color: "red"}} >Delete User</Button>
+                <Button onClick={deleteUser} variant="outlined" sx={{color: "red"}} >Delete User</Button>
               </CheckBoxParentWrapper>
           </MyFormWrapper>
       </Paper>

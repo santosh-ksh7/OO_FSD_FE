@@ -11,10 +11,15 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 import { CheckBoxLabelWrapper, CheckBoxParentWrapper, MyFormWrapper, MyTitle } from '../../components/MUIreusable';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 
 
 
 function CreateNewUser() {
+
+    const URL = "users"
+
+    const axiosPrivate = useAxiosPrivate()
 
     const[showpwd, setShowpwd] = useState(false)
 
@@ -28,8 +33,21 @@ function CreateNewUser() {
     const formik = useFormik({
         initialValues: {name: "", password: "", re_password: "", roles: ["employee"]},
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values)
+        onSubmit: async (values) => {
+            try {
+                let value2send = {
+                    ...values,
+                    roles: JSON.stringify(values.roles)
+                }
+                console.log("🚀 ~ file: CreateNewUser.jsx:39 ~ onSubmit: ~ values:", value2send);
+                const response = await axiosPrivate.post(URL, value2send);
+                if(response.status === 201){
+                    alert(response.data.message)
+                }
+            } catch (error) {
+                console.log(error);
+                alert(error.response.data.message);
+            }
         }
     })
 
